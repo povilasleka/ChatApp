@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
 import { Lobby } from './components/Lobby';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import './custom.css'
+import { Room } from './components/Room';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -29,11 +28,12 @@ export default class App extends Component {
         this.setState({ connection });
     };
 
-    render () {
-        return (
-            <Layout>
-                <Lobby joinRoom={this.joinRoom}/>
-            </Layout>
-        );
+    render() {
+        if (this.state.connection === null) {
+            return <Lobby joinRoom={this.joinRoom} />
+        }
+        else {
+            return <Room connection={this.state.connection} />
+        }
     }
 }
