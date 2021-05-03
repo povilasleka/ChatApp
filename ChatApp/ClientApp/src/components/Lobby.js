@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { Container, Form, FormLabel, Button } from 'react-bootstrap';
 
-export const Lobby = () => {
+export const Lobby = ({ joinRoom }) => {
     const [userName, setUserName] = useState("");
     const [roomName, setRoomName] = useState("");
+
+    function submit(e) {
+        e.preventDefault();
+        console.log("Form submitted!");
+        joinRoom(userName, roomName);
+    }
 
     return (
         <Container>
             <h1>Choose a room</h1>
-            <Form>
+            <Form onSubmit={submit}>
                 <Form.Group>
                     <FormLabel>Room name</FormLabel>
                     <Form.Control

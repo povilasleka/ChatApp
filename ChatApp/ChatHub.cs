@@ -14,7 +14,7 @@ namespace ChatApp
             await Groups.AddToGroupAsync(Context.ConnectionId, clientConnection.Room);
 
             await Clients.Group(clientConnection.Room)
-                .SendAsync("ReceiveMessage", $"[+] {clientConnection.Client} joined the room!");
+                .SendAsync("ReceiveMessage", "BOT", $"[+] {clientConnection.Client} joined the room!");
         }
     }
 }

@@ -2,21 +2,38 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Lobby } from './components/Lobby';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import './custom.css'
 
 export default class App extends Component {
-  static displayName = App.name;
+    static displayName = App.name;
 
-  render () {
-    return (
-      <Layout>
-        <Route exact path='/' component={Lobby} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-      </Layout>
-    );
-  }
+    state = {
+        connection: null
+    };
+
+    joinRoom = async (client, room) => {
+        const connection = new HubConnectionBuilder()
+            .withUrl("chathub")
+            .configureLogging(LogLevel.Information)
+            .build();
+
+        connection.on("ReceiveMessage", (client, message) => {
+            console.log("message received " + client + ": " + message);
+        });
+
+        await connection.start();
+        await connection.invoke("JoinRoom", { client, room });
+
+        this.setState({ connection });
+    };
+
+    render () {
+        return (
+            <Layout>
+                <Lobby joinRoom={this.joinRoom}/>
+            </Layout>
+        );
+    }
 }
