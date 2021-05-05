@@ -14,7 +14,7 @@ namespace ChatApp.Controllers
     public class RoomController : Controller
     {
         private readonly IHubContext<ChatHub> _chatHubContext;
-        private readonly ConcurrentBag<Room> _rooms;
+        private readonly HashSet<Room> _rooms;
         public RoomController(IHubContext<ChatHub> chatHubContext, SingletonManager sm)
         {
             _chatHubContext = chatHubContext;
@@ -34,7 +34,7 @@ namespace ChatApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Room room) 
+        public IActionResult Create(Room room) 
         {
             if (!ModelState.IsValid) 
             {
@@ -49,6 +49,20 @@ namespace ChatApp.Controllers
             _rooms.Add(room);
 
             return Created($"room/{room.Name}", room);
+        }
+
+        [HttpDelete("{roomName}")]
+        public IActionResult Remove(string roomName) 
+        {
+            if (!_rooms.Any(r => r.Name == roomName))
+            {
+                return BadRequest("Room does not exist.");
+            }
+
+            Room roomToRemove = _rooms.First(r => r.Name == roomName);
+            _rooms.Remove(roomToRemove);
+
+            return NoContent();
         }
     }
 }

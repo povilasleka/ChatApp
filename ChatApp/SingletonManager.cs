@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using ChatApp.Models;
 
 namespace ChatApp 
@@ -7,9 +8,9 @@ namespace ChatApp
     {
         public SingletonManager()
         {
-            Rooms = new ConcurrentBag<Room>();
+            Rooms = new HashSet<Room>();
         }
 
-        public ConcurrentBag<Room> Rooms { get; }
+        public HashSet<Room> Rooms { get; }
     }
 }
