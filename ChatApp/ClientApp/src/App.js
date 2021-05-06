@@ -9,7 +9,8 @@ export default class App extends Component {
     static displayName = App.name;
 
     state = {
-        connection: null
+        connection: null,
+        connectionError: null
     };
 
     joinRoom = async (client, room) => {
@@ -22,15 +23,21 @@ export default class App extends Component {
             console.log("message received " + client + ": " + message);
         });
 
+        connection.on("JoinResponse", (success, message) => {
+            if (success) {
+                this.setState({ connection })
+            } else {
+                this.setState({ connectionError: message });
+            }
+        });
+
         await connection.start();
         await connection.invoke("JoinRoom", { client, room });
-
-        this.setState({ connection });
     };
 
     render() {
         if (this.state.connection === null) {
-            return <Lobby joinRoom={this.joinRoom} />
+            return <Lobby joinRoom={this.joinRoom} errorMessage={this.state.connectionError}/>
         }
         else {
             return <Room connection={this.state.connection} />

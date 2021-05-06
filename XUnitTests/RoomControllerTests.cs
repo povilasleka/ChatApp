@@ -4,7 +4,6 @@ using ChatApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -34,8 +33,8 @@ namespace XUnitTests
         {
             var mockContext = new Mock<IHubContext<ChatHub>>();
             var singletonManager = new SingletonManager();
-            singletonManager.Rooms.Add(new Room { Name = "TestRoom1", Description = "ABCD" });
-            singletonManager.Rooms.Add(new Room { Name = "TestRoom2", Description = "DCBA" });
+            singletonManager.Rooms.Add(new Room { Name = "A", Description = "A", Author="C" });
+            singletonManager.Rooms.Add(new Room { Name = "B", Description = "B", Author="C" });
 
             var controller = new RoomController(mockContext.Object, singletonManager);
 
@@ -51,7 +50,7 @@ namespace XUnitTests
         {
             var mockContext = new Mock<IHubContext<ChatHub>>();
             var singletonManager = new SingletonManager();
-            Room newRoom = new Room { Name = "Newly Created Room", Description = "Some text" };
+            Room newRoom = new Room { Name = "A", Description = "B", Author = "C" };
 
             var controller = new RoomController(mockContext.Object, singletonManager);
 
@@ -83,7 +82,7 @@ namespace XUnitTests
         {
             var mockContext = new Mock<IHubContext<ChatHub>>();
             var singletonManager = new SingletonManager();
-            Room room = new Room() { Name = "Room1", Description = "Some text" };
+            Room room = new Room() { Name = "Room1", Description = "Some text", Author="A" };
             singletonManager.Rooms.Add(room);
 
             var controller = new RoomController(mockContext.Object, singletonManager);
@@ -109,7 +108,7 @@ namespace XUnitTests
         {
             var mockContext = new Mock<IHubContext<ChatHub>>();
             var singletonManager = new SingletonManager();
-            singletonManager.Rooms.Add(new Room { Name = "Room", Description = "Description" });
+            singletonManager.Rooms.Add(new Room { Name = "Room", Description = "Description", Author="A" });
             var controller = new RoomController(mockContext.Object, singletonManager);
 
             var result = controller.Remove("Room");

@@ -13,5 +13,8 @@ namespace ChatApp.Models
 
         [Required]
         public string Description { get; set; }
+
+        [Required]
+        public string Author { get; set; }
     }
 }
