@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, FormLabel, Button, Card, Row, Col, Alert } from 'react-bootstrap';
-import axios from 'axios';
 
-export const Lobby = ({ joinRoom, errorMessage }) => {
+export const Lobby = ({ joinRoom, errorMessage, openRooms }) => {
     const [userName, setUserName] = useState("");
     const [roomName, setRoomName] = useState("");
-    const [openRooms, setOpenRooms] = useState([]);
 
     function submit(e) {
         e.preventDefault();
@@ -13,16 +11,12 @@ export const Lobby = ({ joinRoom, errorMessage }) => {
         joinRoom(userName, roomName);
     }
 
-    useEffect(() => {
-        axios.get('/room')
-            .then(function (response) {
-                setOpenRooms(response.data);
-            });
-    }, []);
-
     return (
         <Container>
-            <h1>Choose a room</h1>
+            <Row className="mb-3 mt-3">
+                <Col><h2>Connect</h2></Col>
+                <Col><h2>Open Rooms</h2></Col>
+            </Row>
             <Row>
                 <Col>
                 {errorMessage != null &&
@@ -36,8 +30,8 @@ export const Lobby = ({ joinRoom, errorMessage }) => {
                         <Form.Control
                             name="RoomName"
                             placeholder="Room name"
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
+                            value={roomName}
+                            onChange={(e) => setRoomName(e.target.value)}
                         />
                     </Form.Group>
 
@@ -46,8 +40,8 @@ export const Lobby = ({ joinRoom, errorMessage }) => {
                         <Form.Control
                             name="UserName"
                             placeholder="Your username"
-                            value={roomName}
-                            onChange={(e) => setRoomName(e.target.value)}
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                         />
                     </Form.Group>
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Lobby } from './components/Lobby';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import axios from 'axios';
 
 import './custom.css'
 import { Room } from './components/Room';
@@ -10,8 +11,16 @@ export default class App extends Component {
 
     state = {
         connection: null,
-        connectionError: null
+        connectionError: null,
+        openRooms: []
     };
+
+    componentWillMount = () => {
+        axios.get('/room')
+            .then((response) => {
+                this.setState({ openRooms: response.data })
+            });
+    }
 
     joinRoom = async (client, room) => {
         const connection = new HubConnectionBuilder()
@@ -37,7 +46,11 @@ export default class App extends Component {
 
     render() {
         if (this.state.connection === null) {
-            return <Lobby joinRoom={this.joinRoom} errorMessage={this.state.connectionError}/>
+            return <Lobby
+                joinRoom={this.joinRoom}
+                errorMessage={this.state.connectionError}
+                openRooms={this.state.openRooms}
+            />
         }
         else {
             return <Room connection={this.state.connection} />
