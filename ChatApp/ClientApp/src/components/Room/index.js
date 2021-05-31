@@ -13,7 +13,7 @@ const messages = [
     { author: 'You', text: 'My Message3' }
 ];
 
-export const Room = ({ connection }) => {
+export const Room = ({ connection, messages }) => {
     return (
         <div className="container">
             <Navbar />

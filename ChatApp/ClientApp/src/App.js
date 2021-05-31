@@ -12,6 +12,7 @@ export default class App extends Component {
     state = {
         connection: null,
         connectionError: null,
+        messages: [],
         openRooms: []
     };
 
@@ -29,7 +30,14 @@ export default class App extends Component {
             .build();
 
         connection.on("ReceiveMessage", (client, message) => {
-            console.log("message received " + client + ": " + message);
+            this.setState({
+                messages: [
+                    ...this.state.messages,
+                    { author: client, text: message }
+                ]
+            });
+
+            console.log(this.state.messages);
         });
 
         connection.on("JoinResponse", (success, message) => {
@@ -45,15 +53,14 @@ export default class App extends Component {
     };
 
     render() {
-        if (this.state.connection !== null) {
+        if (this.state.connection === null) {
             return <Lobby
                 joinRoom={this.joinRoom}
                 errorMessage={this.state.connectionError}
                 openRooms={this.state.openRooms}
             />
-        }
-        else {
-            return <Room connection={this.state.connection} />
+        } else {
+            return <Room connection={this.state.connection} messages={this.state.messages}/>
         }
     }
 }

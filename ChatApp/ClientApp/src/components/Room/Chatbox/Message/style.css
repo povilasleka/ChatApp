@@ -1,0 +1,22 @@
+﻿.chatbox-message {
+    padding-bottom: 10px;
+}
+
+.chatbox-message-right {
+    padding-bottom: 10px;
+    float: right;
+    text-align: right;
+}
+
+.chatbox-message-author {
+    font-size: .8em;
+    font-weight: bold;
+}
+
+.chatbox-message-text {
+    background: #373E40;
+    color: whitesmoke;
+    border-radius: 10px;
+    padding: .5em;
+    width: fit-content;
+}

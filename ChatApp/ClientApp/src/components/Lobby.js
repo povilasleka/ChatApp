@@ -13,8 +13,8 @@ export const Lobby = ({ joinRoom, errorMessage, openRooms }) => {
     return (
         <div>
             <div className="mb-3 mt-3">
-                <Col><h2>Connect</h2></Col>
-                <Col><h2>Open Rooms</h2></Col>
+                <div><h2>Connect</h2></div>
+                <div><h2>Open Rooms</h2></div>
             </div>
             <div>
                 <div>
@@ -23,10 +23,10 @@ export const Lobby = ({ joinRoom, errorMessage, openRooms }) => {
                         <b>[!]</b> {errorMessage}
                     </div>}
 
-                <div onSubmit={submit}>
+                <form onSubmit={submit}>
                     <div>
                         <div>Room name</div>
-                        <div
+                        <input
                             name="RoomName"
                             placeholder="Room name"
                             value={roomName}
@@ -36,7 +36,7 @@ export const Lobby = ({ joinRoom, errorMessage, openRooms }) => {
 
                     <div>
                         <div>Username</div>
-                        <div
+                        <input
                             name="UserName"
                             placeholder="Your username"
                             value={userName}
@@ -45,18 +45,7 @@ export const Lobby = ({ joinRoom, errorMessage, openRooms }) => {
                     </div>
 
                     <button type="submit" disabled={!userName || !roomName}>Connect</button>
-                </div>
-                </div>
-
-                <div>
-                {openRooms.map((room, key) => (
-                    <div className="mb-1">
-                        <div>
-                            <div>{room.author}'s {room.name}</div>
-                            <a href="#">Enter address</a>
-                        </div>
-                    </div>
-                ))}
+                </form>
                 </div>
             </div>
         </div>
