@@ -3,7 +3,7 @@ import { Lobby } from './components/Lobby';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import axios from 'axios';
 
-import './custom.css'
+import './App.css';
 import { Room } from './components/Room';
 
 export default class App extends Component {
@@ -45,7 +45,7 @@ export default class App extends Component {
     };
 
     render() {
-        if (this.state.connection === null) {
+        if (this.state.connection !== null) {
             return <Lobby
                 joinRoom={this.joinRoom}
                 errorMessage={this.state.connectionError}

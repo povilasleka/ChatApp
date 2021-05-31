@@ -1,0 +1,19 @@
+﻿body, html {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 50px auto;
+    grid-template-areas: "title navbar" "sidebar chatbox";
+    width: 100vw;
+    height: 100vh;
+}
+
+.padding-sides {
+    padding: 1em;
+}
+
+

@@ -1,0 +1,18 @@
+﻿.sidebar {
+    grid-area: sidebar;
+    background: #488286;
+    color: whitesmoke;
+}
+
+.sidebar-item {
+    background: rgba(48,82,82,.4);
+    border-radius: 10px;
+    padding: 1em;
+    color: whitesmoke;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.sidebar-item:hover {
+    background: rgba(48,82,82,.8);
+}
