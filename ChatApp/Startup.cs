@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using ChatApp.Models;
+using ChatApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,8 @@ namespace ChatApp
             services.AddControllersWithViews();
             services.AddSignalR();
             services.AddSingleton<SingletonManager>();
+            services.AddSingleton<IService<Room>, RoomService>();
+            services.AddSingleton<IService<Connection>, ConnectionService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

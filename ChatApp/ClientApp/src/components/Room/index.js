@@ -14,6 +14,11 @@ const messages = [
 ];
 
 export const Room = ({ connection, messages }) => {
+
+    /*function sendMessage(message) {
+        connection.invoke("SendMessage", { client: }, message);
+    }*/
+
     return (
         <div className="container">
             <Navbar />

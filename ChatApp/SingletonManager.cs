@@ -9,10 +9,10 @@ namespace ChatApp
         public SingletonManager()
         {
             Rooms = new HashSet<Room>();
-            ClientConnections = new HashSet<ClientConnection>();
+            ClientConnections = new HashSet<Connection>();
         }
 
         public HashSet<Room> Rooms { get; }
-        public HashSet<ClientConnection> ClientConnections { get; }
+        public HashSet<Connection> ClientConnections { get; }
     }
 }

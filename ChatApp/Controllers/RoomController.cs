@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ChatApp.Models;
+using ChatApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -10,24 +11,22 @@ namespace ChatApp.Controllers
     [Route("[controller]")]
     public class RoomController : Controller
     {
-        private readonly IHubContext<ChatHub> _chatHubContext;
-        private readonly HashSet<Room> _rooms;
-        public RoomController(IHubContext<ChatHub> chatHubContext, SingletonManager sm)
+        private readonly IService<Room> _roomService;
+        public RoomController(IService<Room> roomService)
         {
-            _chatHubContext = chatHubContext;
-            _rooms = sm.Rooms;
+            _roomService = roomService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Room>> Index()
         {
-           return _rooms;
+            return _roomService.GetAll().ToList();
         }
 
         [HttpGet("{roomName}")]
         public ActionResult<Room> Get(string roomName) 
         {
-            return _rooms.FirstOrDefault(r => r.Name == roomName);
+            return _roomService.GetFirst(r => r.Name == roomName);
         }
 
         [HttpPost]
@@ -38,12 +37,12 @@ namespace ChatApp.Controllers
                 return BadRequest("Room model is not valid.");
             }
 
-            if (_rooms.Any(r => r.Name == room.Name))
+            if (_roomService.GetAll().Any(r => r.Name == room.Name))
             {
                 return BadRequest("Room already exists.");
             }
 
-            _rooms.Add(room);
+            _roomService.Add(room);
 
             return Created($"room/{room.Name}", room);
         }
@@ -51,13 +50,12 @@ namespace ChatApp.Controllers
         [HttpDelete("{roomName}")]
         public IActionResult Remove(string roomName) 
         {
-            if (!_rooms.Any(r => r.Name == roomName))
+            if (!_roomService.Contains(r => r.Name == roomName))
             {
                 return BadRequest("Room does not exist.");
             }
 
-            Room roomToRemove = _rooms.First(r => r.Name == roomName);
-            _rooms.Remove(roomToRemove);
+            _roomService.RemoveFirst(r => r.Name == roomName);
 
             return NoContent();
         }

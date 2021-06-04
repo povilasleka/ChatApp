@@ -1,4 +1,5 @@
 ﻿using ChatApp.Models;
+using ChatApp.Services;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -9,23 +10,25 @@ namespace ChatApp
 {
     public class ChatHub : Hub
     {
-        private readonly HashSet<Room> _rooms;
-        private readonly HashSet<ClientConnection> _clientConnections;
+        private readonly IService<Connection> _connectionService;
+        private readonly IService<Room> _roomService;
 
-        public ChatHub(SingletonManager sm)
+        public ChatHub(IService<Room> roomService, IService<Connection> connectionService)
         {
-            _rooms = sm.Rooms;
-            _clientConnections = sm.ClientConnections;
+            _connectionService = connectionService;
+            _roomService = roomService;
         }
 
-        public async Task JoinRoom(ClientConnection clientConnection)
+        public async Task JoinRoom(Connection clientConnection)
         {
-            if (!_rooms.Any(r => r.Name == clientConnection.Room))
+            if (!_roomService.Contains(r => r.Name == clientConnection.Room))
             {
-                await Clients.Caller.SendAsync("JoinResponse", false, "Room does not exist");
+                await Clients.Caller.SendAsync("JoinResponse", false, "Join failed!");
                 return;
             }
-            _clientConnections.Add(clientConnection);
+
+            clientConnection.ConnectionId = Context.ConnectionId;
+            _connectionService.Add(clientConnection);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, clientConnection.Room);
 
@@ -34,7 +37,7 @@ namespace ChatApp
                 .SendAsync("ReceiveMessage", "BOT", $"[+] {clientConnection.Client} joined the room!");
         }
 
-        public async Task SendMessage(ClientConnection clientConnection, string message)
+        public async Task SendMessage(Connection clientConnection, string message)
         {
             await Clients.Group(clientConnection.Room)
                 .SendAsync("ReceiveMessage", clientConnection.Client, message);
