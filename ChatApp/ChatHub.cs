@@ -37,10 +37,13 @@ namespace ChatApp
                 .SendAsync("ReceiveMessage", "BOT", $"[+] {clientConnection.Client} joined the room!");
         }
 
-        public async Task SendMessage(Connection clientConnection, string message)
+        public async Task SendMessage(string message)
         {
-            await Clients.Group(clientConnection.Room)
-                .SendAsync("ReceiveMessage", clientConnection.Client, message);
+            Connection connection = _connectionService.GetFirst(c => 
+                c.ConnectionId == Context.ConnectionId);
+
+            await Clients.Group(connection.Room)
+                .SendAsync("ReceiveMessage", connection.Client, message);
         }
     }
 }

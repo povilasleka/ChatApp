@@ -15,15 +15,15 @@ const messages = [
 
 export const Room = ({ connection, messages }) => {
 
-    /*function sendMessage(message) {
-        connection.invoke("SendMessage", { client: }, message);
-    }*/
+    function sendMessage(message) {
+        connection.invoke("SendMessage", message);
+    }
 
     return (
         <div className="container">
             <Navbar />
             <Sidebar users={users} />
-            <Chatbox messages={messages}/>
+            <Chatbox messages={messages} handleSend={sendMessage}/>
         </div>
     );
 };

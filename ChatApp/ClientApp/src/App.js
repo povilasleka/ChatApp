@@ -36,8 +36,6 @@ export default class App extends Component {
                     { author: client, text: message }
                 ]
             });
-
-            console.log(this.state.messages);
         });
 
         connection.on("JoinResponse", (success, message) => {
